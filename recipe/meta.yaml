@@ -14,15 +14,16 @@ source:
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps -vv
-  noarch: python
 
 requirements:
   host:
-    - python >=3.7
+    - python
     - pip
+    - wheel
+    - setuptools
 
   run:
-    - python >=3.7
+    - python
     - google-auth >=1.2
     - google-auth-oauthlib
     - google-cloud-storage >1.40
