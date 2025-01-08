@@ -12,7 +12,7 @@ source:
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  # https://github.com/fsspec/gcsfs/blob/2024.12.0/setup.py#L23
+  # https://github.com/fsspec/gcsfs/blob/2024.12.0/setup.py#L36
   skip: True  # [py<39]
 
 requirements:
