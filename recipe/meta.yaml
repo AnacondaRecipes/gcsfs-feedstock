@@ -19,6 +19,8 @@ requirements:
   host:
     - python
     - pip
+    - wheel
+    - setuptools
   run:
     - python
     - aiohttp !=4.0.0a0,!=4.0.0a1
@@ -67,7 +69,7 @@ about:
   license_file: LICENSE.txt
   license_family: BSD
   summary: Pythonic file-system interface for Google Cloud Storage
-  doc_url: http://gcsfs.readthedocs.io/en/latest/
+  doc_url: https://gcsfs.readthedocs.io/
   dev_url: https://github.com/fsspec/gcsfs
   description: A pythonic file-system interface to Google Cloud Storage.
 
