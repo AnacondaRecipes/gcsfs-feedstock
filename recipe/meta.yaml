@@ -19,17 +19,35 @@ requirements:
   host:
     - python
     - pip
-
   run:
     - python
     - aiohttp !=4.0.0a0,!=4.0.0a1
     - decorator >4.1.2
-    # Must be the same version of gcsfs
+    # Must be the same version as gcsfs
     - fsspec ==2024.12.0
     - google-auth >=1.2
     - google-auth-oauthlib
     - google-cloud-storage
     - requests
+
+# Ignore gcsfs/tests/test_core.py and derived all tests trying to use docker
+#> raise CalledProcessError(retcode, process.args, output=stdout, stderr=stderr)
+#E subprocess.CalledProcessError: Command '['docker', 'ps', '-a', '-q', '--filter', 'name=gcsfs_test']' returned non-zero exit status 1.
+{% set ignore_tests = " --ignore=gcsfs/tests/test_core.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=gcsfs/tests/derived" %}
+# Same with this tests
+#E subprocess.CalledProcessError: Command '['docker', 'ps', '-a', '-q', '--filter', 'name=gcsfs_test']' returned non-zero exit status 1.
+{% set deselect_tests = " --deselect=gcsfs/tests/test_inventory_report_listing.py::test_ls_base" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_simple" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_default_gcsfilesystem" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_errors" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_with_data" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_clear_empty" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_pickle" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_array" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_bytearray" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_new_bucket" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_metadata_read_permissions" %}
 
 test:
   source_files:
@@ -38,9 +56,10 @@ test:
     - gcsfs
   commands:
     - pip check
-    - pytest -v gcsfs/tests
+    - pytest -v {{ ignore_tests }} {{ deselect_tests }} gcsfs/tests
   requires:
     - pip
+    - pytest
 
 about:
   home: https://github.com/dask/gcsfs
