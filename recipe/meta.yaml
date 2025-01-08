@@ -28,7 +28,7 @@ requirements:
     # Must be the same version as gcsfs
     # https://github.com/fsspec/gcsfs/blob/main/requirements.txt#L3
     - fsspec ==2024.12.0
-    - google-auth >=1.2,<1.3
+    - google-auth >=1.2,<2
     - google-auth-oauthlib
     - google-cloud-storage
     - requests
