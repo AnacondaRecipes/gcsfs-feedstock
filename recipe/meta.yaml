@@ -44,8 +44,13 @@ about:
   home: https://github.com/dask/gcsfs
   license: BSD-3-Clause
   license_file: LICENSE.txt
+  license_family: BSD-3
   summary: Pythonic file-system interface for Google Cloud Storage
-  doc_url: http://gcsfs.readthedocs.io/en/latest/
+  description: |
+    This package depends on fsspec, and inherits many useful behaviours from there, including integration with Dask,
+    and the facility for key-value dict-like objects of the type used by zarr.
+  doc_url: http://gcsfs.readthedocs.io
+  dev_url: https://github.com/fsspec/gcsfs
 
 extra:
   recipe-maintainers:
