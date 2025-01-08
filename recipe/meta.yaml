@@ -12,6 +12,8 @@ source:
   sha256: {{ sha256 }}
 
 build:
+  # temporarily disable py312 until fsspec is rebuilt
+  skip: True  # [py>311]
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
