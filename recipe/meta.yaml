@@ -1,50 +1,78 @@
 {% set name = "gcsfs" %}
-{% set version = "2023.1.0" %}
-{% set sha256 = "0a7b7ca8c1affa126a14ba35d7b7dff81c49e2aaceedda9732c7f159a4837a26" %}
+{% set version = "2024.12.0" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/gcsfs-{{ version }}.tar.gz
+  sha256: e672413922108300ebc1fe78b8f99f3c7c1b94e7e088f5a6dc88de6d5a93d156
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
-  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  # https://github.com/fsspec/gcsfs/blob/2024.12.0/setup.py#L36
+  skip: True  # [py<39]
 
 requirements:
   host:
-    - python >=3.7
+    - python
     - pip
-
+    - wheel
+    - setuptools
   run:
-    - python >=3.7
+    - python
+    - aiohttp !=4.0.0a0,!=4.0.0a1
+    - decorator >4.1.2
+    # Must be the same version as gcsfs
+    # https://github.com/fsspec/gcsfs/blob/main/requirements.txt#L3
+    - fsspec =={{ version }}
     - google-auth >=1.2
     - google-auth-oauthlib
-    - google-cloud-storage >1.40
+    - google-cloud-storage
     - requests
-    - decorator >4.1.2
-    - fsspec =={{ version }}
-    - aiohttp
+
+# Ignore gcsfs/tests/test_core.py and derived all tests trying to use docker
+#> raise CalledProcessError(retcode, process.args, output=stdout, stderr=stderr)
+#E subprocess.CalledProcessError: Command '['docker', 'ps', '-a', '-q', '--filter', 'name=gcsfs_test']' returned non-zero exit status 1.
+{% set ignore_tests = " --ignore=gcsfs/tests/test_core.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=gcsfs/tests/derived" %}
+# Same with this tests
+#E subprocess.CalledProcessError: Command '['docker', 'ps', '-a', '-q', '--filter', 'name=gcsfs_test']' returned non-zero exit status 1.
+{% set deselect_tests = " --deselect=gcsfs/tests/test_inventory_report_listing.py::test_ls_base" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_simple" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_default_gcsfilesystem" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_errors" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_with_data" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_clear_empty" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_pickle" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_array" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_bytearray" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_new_bucket" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_metadata_read_permissions" %}
 
 test:
+  source_files:
+    - gcsfs
   imports:
     - gcsfs
   commands:
     - pip check
+    - pytest -v {{ ignore_tests }} {{ deselect_tests }} gcsfs/tests
   requires:
     - pip
+    - pytest
 
 about:
   home: https://github.com/dask/gcsfs
   license: BSD-3-Clause
   license_file: LICENSE.txt
+  license_family: BSD
   summary: Pythonic file-system interface for Google Cloud Storage
-  doc_url: http://gcsfs.readthedocs.io/en/latest/
+  doc_url: https://gcsfs.readthedocs.io/
+  dev_url: https://github.com/fsspec/gcsfs
+  description: A pythonic file-system interface to Google Cloud Storage.
 
 extra:
   recipe-maintainers:
