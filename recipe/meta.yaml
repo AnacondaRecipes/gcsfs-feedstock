@@ -12,6 +12,8 @@ source:
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-build-isolation -vv
+  # Disable py312 - AttributeError: module 'configparser' has no attribute 'SafeConfigParser'.
+  # Can't apply this patch - https://github.com/fsspec/gcsfs/pull/568 (36 conflicts)
   skip: True  # [py<37 or py>311]
 
 requirements:
