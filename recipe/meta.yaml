@@ -11,7 +11,8 @@ source:
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-build-isolation -vv
+  skip: True  # [py<37 or py>311]
 
 requirements:
   host:
@@ -27,7 +28,7 @@ requirements:
     - requests
     - decorator >4.1.2
     - fsspec =={{ version }}
-    - aiohttp
+    - aiohttp !=4.0.0a0,!=4.0.0a1
 
 # Ignore gcsfs/tests/test_core.py and derived all tests trying to use docker
 #> raise CalledProcessError(retcode, process.args, output=stdout, stderr=stderr)
