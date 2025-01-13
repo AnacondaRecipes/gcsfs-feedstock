@@ -1,50 +1,78 @@
 {% set name = "gcsfs" %}
 {% set version = "2022.11.0" %}
-{% set sha256 = "84d0caada7097e357d735d7e16e8064f0819d28746101d6f65ff42938557e831" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: 84d0caada7097e357d735d7e16e8064f0819d28746101d6f65ff42938557e831
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
-  noarch: python
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-build-isolation -vv
+  # Disable py312 - AttributeError: module 'configparser' has no attribute 'SafeConfigParser'.
+  # Can't apply this patch - https://github.com/fsspec/gcsfs/pull/568 (36 conflicts)
+  skip: True  # [py<37 or py>311]
 
 requirements:
   host:
-    - python >=3.7
+    - python
     - pip
-
+    - wheel
+    - setuptools
   run:
-    - python >=3.7
+    - python
     - google-auth >=1.2
     - google-auth-oauthlib
-    - google-cloud-storage >1.40
+    - google-cloud-storage
     - requests
     - decorator >4.1.2
     - fsspec =={{ version }}
-    - aiohttp
+    - aiohttp !=4.0.0a0,!=4.0.0a1
+
+# Ignore gcsfs/tests/test_core.py and derived all tests trying to use docker
+#> raise CalledProcessError(retcode, process.args, output=stdout, stderr=stderr)
+#E subprocess.CalledProcessError: Command '['docker', 'ps', '-a', '-q', '--filter', 'name=gcsfs_test']' returned non-zero exit status 1.
+{% set ignore_tests = " --ignore=gcsfs/tests/test_core.py" %}
+# Same with this tests
+#E subprocess.CalledProcessError: Command '['docker', 'ps', '-a', '-q', '--filter', 'name=gcsfs_test']' returned non-zero exit status 1.
+{% set deselect_tests = " --deselect=gcsfs/tests/test_mapping.py::test_map_simple" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_default_gcsfilesystem" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_errors" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_with_data" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_complex_keys" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_clear_empty" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_pickle" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_array" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_bytearray" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_new_bucket" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_metadata_read_permissions" %}
 
 test:
+  source_files:
+    - gcsfs
   imports:
     - gcsfs
   commands:
     - pip check
+    - pytest -v {{ ignore_tests }} {{ deselect_tests }} gcsfs/tests
   requires:
     - pip
+    - pytest
 
 about:
   home: https://github.com/dask/gcsfs
   license: BSD-3-Clause
   license_file: LICENSE.txt
+  license_family: BSD
   summary: Pythonic file-system interface for Google Cloud Storage
-  doc_url: http://gcsfs.readthedocs.io/en/latest/
+  description: |
+    This package depends on fsspec, and inherits many useful behaviours from there, including integration with Dask,
+    and the facility for key-value dict-like objects of the type used by zarr.
+  doc_url: https://gcsfs.readthedocs.io
+  dev_url: https://github.com/fsspec/gcsfs
 
 extra:
   recipe-maintainers:
