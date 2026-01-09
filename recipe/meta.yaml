@@ -1,5 +1,5 @@
 {% set name = "gcsfs" %}
-{% set version = "2025.10.0" %}
+{% set version = "2025.12.0" %}
 
 package:
   name: {{ name }}
@@ -7,12 +7,12 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 7ac9b16a145bcb1a69fa9cf770ccd3cee7b9a09236911dd586c1d9911b71583d
+  sha256: 9a9c1c32b7899a3967ba30a7e9422cdfda596266f03476cdf5545402b8af4cd5
 
 build:
-  number: 1
+  number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: True  # [py<39]
+  skip: true  # [py<310]
 
 requirements:
   host:
@@ -28,6 +28,7 @@ requirements:
     - google-auth >=1.2
     - google-auth-oauthlib
     - google-cloud-storage
+    - google-cloud-storage-control
     - requests
 
 # Ignore tests which trying to use docker
@@ -45,7 +46,38 @@ requirements:
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_array" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_bytearray" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_new_bucket" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_api" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_metadata_read_permissions" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_checkers.py::test_validate_headers" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_checkers.py::test_checker_validate_http_response" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_checkers.py::test_checker_validate_json_response" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_core_versioned.py::test_info_versioned" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_core_versioned.py::test_cat_versioned" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_core_versioned.py::test_cp_versioned" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_core_versioned.py::test_ls_versioned" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_core_versioned.py::test_find_versioned" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_credentials.py::test_googlecredentials_none" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_credentials.py::test_credentials_from_raw_token" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_init.py::TestConditionalImport::test_experimental_env_unset" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_init.py::TestConditionalImport::test_experimental_env_set" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_validate_inventory_report_info" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_fetch_raw_inventory_report_config" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_fetch_inventory_report_metadata" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_sort_inventory_report_metadata" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_download_inventory_report_content" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_parse_inventory_report_line" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_parse_inventory_reports" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_construct_final_snapshot" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_parse_raw_inventory_report_config_invalid_date" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_parse_raw_inventory_report_config_missing_metadata_fields" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReport::test_parse_raw_inventory_report_config_returns_correct_config" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_inventory_report.py::TestInventoryReportConfig::test_inventory_report_config_creation" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_tempfile" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_retriable_exception" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_pickle_serialization" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_multiprocessing_error_handling" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_validate_response" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_download_range" %}
 
 test:
   source_files:
