@@ -27,7 +27,7 @@ requirements:
     - fsspec =={{ version }}
     - google-auth >=1.2
     - google-auth-oauthlib
-    - google-cloud-storage
+    - google-cloud-storage >=3.7.0
     - google-cloud-storage-control
     - requests
 
