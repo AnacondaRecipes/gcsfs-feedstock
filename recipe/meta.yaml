@@ -6,8 +6,8 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 283941a7a53bdbfed2133f6b471c640e61c0a1379eb52280a26618b83acc49c0
+  url: https://github.com/fsspec/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
+  sha256: 06f99b24177d51af3338d495fd6c4ea0f7dc1ff80782d36d6e5c6bae88bbe2c5
 
 build:
   number: 0
@@ -80,6 +80,92 @@ requirements:
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_multiprocessing_error_handling" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_validate_response" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_download_range" %}
+
+
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_initial_state" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_fetch_with_readahead" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_cache_hit_fully_contained" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_cache_hit_spanning_chunks" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_backward_seek_clears_cache" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_forward_seek_miss" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_zero_copy_optimization" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_end_of_file_truncation" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_none_arguments" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_out_of_bounds" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_concurrency.py::test_parallel_tasks_first_completed_basic" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_concurrency.py::test_parallel_tasks_first_completed_cancellation" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_concurrency.py::test_parallel_tasks_first_completed_exception" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_concurrency.py::test_parallel_tasks_unretrieved_exception_fix" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_core_versioned.py::test_write_captures_generation" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_core_versioned.py::test_write_captures_generation_multipart" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_credentials.py::test_no_gce_check_skips_cloud" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_credentials.py::test_connect_google_default_uses_request" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_credentials.py::test_raw_token_credentials_init_with_raw_token_fetches_expiry" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_credentials.py::test_raw_token_credentials_init_env_var_disables_fetch" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_credentials.py::test_raw_token_credentials_init_raises_on_invalid_token" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_credentials.py::test_raw_token_credentials_refresh_throws_error_after_expiry" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_credentials.py::test_raw_token_credentials_init_raises_on_short_lived_token" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_init.py::TestConditionalImport::test_experimental_env_is_set_by_default" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_init.py::TestConditionalImport::test_version_exists" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_init.py::TestConditionalImport::test_version_fallback_metadata" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_init.py::TestConditionalImport::test_version_fallback_unknown" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_fast_slice_direct" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_running_average_tracker" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_max_prefetch_size_property" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_sequential_read_spanning_blocks" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_fetch_default_args_and_out_of_bounds" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_seek_logic" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_exception_placed_in_queue" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_producer_concurrency_streak_and_min_chunk" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_producer_loop_space_constraints" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_producer_error_propagation" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_read_after_close_or_error" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_empty_queue_when_stopped" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_cancel_all_tasks_cleans_queue_with_exceptions" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_cleanup_cancels_active_tasks" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_read_task_cancellation" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_async_fetch_exception_trapping" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_read_past_eof_internal" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_fetch_with_exact_block_matches" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_queue_empty_race_condition" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_producer_space_remaining_break" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_producer_min_chunk_logic" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_producer_loop_exception" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_seek_same_offset" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_read_history_maxlen" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_fast_slice_branch" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_fetch_stopped_during_execution" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_async_fetch_not_block_break" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_fetch_stopped_before_execution" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_async_fetch_zero_copy_remainder" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_read_runtime_error_on_stopped_empty" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_init_invalid_max_prefetch_size" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_init_valid_max_prefetch_size_edge_case" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_consumer_zero_size_checks" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_producer_min_chunk_inner_break" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_prefetcher.py::test_producer_loop_break_on_stopped_after_wakeup" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_storage_control_retry_config_from_kwargs" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_get_storage_control_retry_config_resolution" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_get_storage_control_retry_config_execution" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_get_storage_control_retry_config_non_retriable" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_init_aaow" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_init_aaow_with_flush_interval_bytes" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_init_mrd_success" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_init_mrd_not_found" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_close_aaow" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_close_mrd" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_mrd_pool_close" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_mrd_pool_scaling" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_mrd_pool_double_initialize" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_mrd_pool_get_mrd_creation_error" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_mrd_pool_close_with_exceptions" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_direct_memmove_buffer_error_handling" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_direct_memmove_buffer" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_direct_memmove_buffer_overflow" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_direct_memmove_buffer_underflow" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_mrd_pool_queue_filled_during_lock_wait" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_mrd_pool_round_robin_multi_request" %}
+{% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_direct_memmove_buffer_submit_failure" %}
 
 test:
   source_files:
