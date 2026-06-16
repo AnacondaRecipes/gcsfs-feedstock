@@ -38,6 +38,7 @@ requirements:
 #   E subprocess.CalledProcessError: Command '['docker', 'ps', '-a', '-q', '--filter', 'name=gcsfs_test']' returned non-zero exit status 1.
 {% set ignore_tests = " --ignore=gcsfs/tests/test_core.py" %}
 {% set ignore_tests = ignore_tests + " --ignore=gcsfs/tests/derived" %}
+{% set ignore_tests = ignore_tests + " --ignore=gcsfs/tests/perf" %}
 {% set deselect_tests = " --deselect=gcsfs/tests/test_inventory_report_listing.py::test_ls_base" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_simple" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_mapping.py::test_map_default_gcsfilesystem" %}
@@ -80,8 +81,6 @@ requirements:
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_multiprocessing_error_handling" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_retry.py::test_validate_response" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_zb_hns_utils.py::test_download_range" %}
-
-
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_initial_state" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_fetch_with_readahead" %}
 {% set deselect_tests = deselect_tests + " --deselect=gcsfs/tests/test_caching.py::test_cache_hit_fully_contained" %}
@@ -185,10 +184,6 @@ test:
     - pip
     - pytest
     - pytest-asyncio
-    - pytest-benchmark
-    - psutil  # [win]
-    - pyyaml  # [win]
-    - numpy   # [win]
 
 about:
   home: https://github.com/dask/gcsfs
