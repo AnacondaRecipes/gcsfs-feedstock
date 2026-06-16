@@ -188,6 +188,7 @@ test:
     - pytest-benchmark
     - psutil  # [win]
     - pyyaml  # [win]
+    - numpy   # [win]
 
 about:
   home: https://github.com/dask/gcsfs
