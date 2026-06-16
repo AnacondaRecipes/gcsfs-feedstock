@@ -20,14 +20,16 @@ requirements:
     - pip
     - wheel
     - setuptools
+    - hatchling >=1.27.0
+    - hatch-vcs
   run:
     - python
-    - aiohttp !=4.0.0a0,!=4.0.0a1
+    - aiohttp >=3.9.0,!=4.0.0a0,!=4.0.0a1
     - decorator >4.1.2
-    - fsspec =={{ version }}
+    - fsspec >=2026.3.0,!=2026.4.0
     - google-auth >=1.2
     - google-auth-oauthlib
-    - google-cloud-storage
+    - google-cloud-storage >=3.9.0
     - google-cloud-storage-control
     - requests
 
