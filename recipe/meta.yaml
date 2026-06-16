@@ -185,6 +185,7 @@ test:
     - pip
     - pytest
     - pytest-asyncio
+    - pytest-benchmark
     - psutil  # [win]
 
 about:
