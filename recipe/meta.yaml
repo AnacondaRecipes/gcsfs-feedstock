@@ -185,6 +185,7 @@ test:
     - pip
     - pytest
     - pytest-asyncio
+    - psutil  # [win]
 
 about:
   home: https://github.com/dask/gcsfs
