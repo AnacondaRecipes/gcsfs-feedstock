@@ -47,6 +47,7 @@ test:
     - gcsfs.retry
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
     # since 2026.5.0 relevant upstream tests all use docker. skip.
   requires:
     - pip
